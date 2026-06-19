@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iframe Credential Test</title>
+    <title>Clean Iframe Test</title>
     <style>
         body {
             font-family: sans-serif;
@@ -19,7 +19,7 @@
         iframe {
             width: 100%;
             height: 600px;
-            border: 3px dashed #28a745;
+            border: 3px dashed #007bff;
             border-radius: 4px;
             margin-top: 15px;
         }
@@ -28,19 +28,11 @@
 <body>
 
 <div class="box">
-    <h2>Testing Frame Loading (With Credentials)</h2>
-    <p>Verifying if the session cookies pass into the cross-origin frame context...</p>
+    <h2>Testing Frame Loading</h2>
+    <p>Checking if the target page renders inside the iframe...</p>
     
-    <!-- 
-      The 'allow' attribute ensures credential management policies are permitted.
-      The 'sandbox' attribute ensures the frame can process forms, scripts, and 
-      explicitly allows it to be treated as same-origin relative to itself to read its own cookies.
-    -->
-    <iframe 
-        src="https://ebooking.trip.com/user/setting?microJump=true"
-        allow="credentialless false"
-        sandbox="allow-same-origin allow-scripts allow-forms allow-popups">
-    </iframe>
+    <!-- Clean iframe: browser default handling for cookies -->
+    <iframe src="https://ebooking.trip.com/"></iframe>
 </div>
 
 </body>
